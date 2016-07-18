@@ -1,3 +1,5 @@
+#!/bin/bash
+set -e
 post_id=$1
 folder=$2
 
