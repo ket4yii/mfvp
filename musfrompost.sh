@@ -1,7 +1,25 @@
 #!/bin/bash
 set -e
-post_id=$1
-folder=$2
+
+#=======Process args======================
+
+if [ -z $1 ]
+then
+  echo "[Error]: Please, pass the first argument"
+  exit 1
+else
+  post_id=$1
+fi
+
+if [ -z $2 ] 
+then
+  folder="."
+else
+  echo "else"
+  folder=$(echo $2 | sed 's/\///')
+fi
+
+#========================================
 
 api_url="https://api.vk.com/method/wall.getById?posts=$post_id&extended=0&v=5.52"
 
@@ -11,9 +29,10 @@ len=$(echo $audios_json | jq 'length')
 
 for i in `seq 0 $len`; do
     title=$(echo $audios_json | jq -r ".[$i].title")
-    artist=$(echo $audios_json | jq -r ".[$i].artist") 
+    artist=$(echo $audios_json | jq -r ".[$i].artist")
     url=$(echo $audios_json | jq -r ".[$i].url")
     
     echo $artist -- $title
-    wget -q --show-progress -O "$2$artist-$title" "$url"
+    wget -q --show-progress -O "$folder/$artist-$title" "$url"
 done
+
