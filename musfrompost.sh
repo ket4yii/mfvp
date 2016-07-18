@@ -5,7 +5,7 @@ folder=$2
 
 api_url="https://api.vk.com/method/wall.getById?posts=$post_id&extended=0&v=5.52"
 
-audios_json=$(curl $api_url 2> /dev/null | jq '.response[0].copy_history[0].attachments | map(select(.type == "audio") | .audio | {artist, title, url})')
+audios_json=$(curl $api_url 2> /dev/null | jq '.response[0].copy_history[0] // .response[0] | .attachments | map(select(.type == "audio") | .audio | {artist, title, url})')
 len=$(echo $audios_json | jq 'length')
 ((len--))
 
